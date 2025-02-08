@@ -1,0 +1,45 @@
+---
+import { Icon } from "astro-icon/components";
+import "../styles/global.css";
+import BreadCrumb from "../components/shared/BreadCrumb.astro";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="min-h-full">
+      <header class="bg-gray-300 shadow-sm">
+        <div
+          class="mx-auto max-w-7xl flex justify-center items-center space-x-4 px-4 py-6 sm:px-6 lg:px-8"
+        >
+          <h1 class="text-2xl font-bold tracking-tight text-gray-900">
+            Lista de tareas
+          </h1>
+        </div>
+      </header>
+      <main>
+        <div x-data="{isCreateWindowOpen: false}">
+          <BreadCrumb />
+          <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <slot />
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+  <script>
+import { responseHandle } from "../utils"
+
+    document.addEventListener('astro:page-load', () => {
+      const form = document.querySelectorAll('form[method]')
+        form.forEach((f) => {
+          f.addEventListener('submit', responseHandle)
+        })
+    })
+  </script>
+</html>

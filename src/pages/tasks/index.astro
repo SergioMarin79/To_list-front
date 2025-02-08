@@ -1,0 +1,26 @@
+---
+import DeleteWindow from "../../components/shared/DeleteWindow.astro"
+import CreateTask from "../../components/tasks/CreateTask.astro"
+import ListTask from "../../components/tasks/ListTask.astro"
+import UpdateTask from "../../components/tasks/UpdateTask.astro"
+import CreateWindowLayout from "../../layouts/shared/CreateWindowLayout.astro"
+import UpdateWindowLayout from "../../layouts/shared/UpdateWindowLayout.astro"
+import TaskLayout from "../../layouts/TaskLayout.astro"
+const endpoint = `${import.meta.env.API_URL}tasks`
+---
+<div x-data="{isCreateWindowOpen: false, isDeleteWindowOpen: false, isUpdateWindowOpen: false}">
+    <TaskLayout>
+        <div x-data="{id: '', name: '', description: '', status: ''}">
+            <ListTask endpoint={endpoint}/>
+            <CreateWindowLayout name="Crear una tarea" endpoint={endpoint}>
+                <CreateTask/>
+            </CreateWindowLayout>
+            
+            <UpdateWindowLayout endpoint={endpoint}>
+                <UpdateTask/>
+            </UpdateWindowLayout>
+
+            <DeleteWindow endpoint={endpoint}/>
+        </div>
+    </TaskLayout>
+</div>
