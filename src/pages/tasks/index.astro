@@ -8,9 +8,9 @@ import UpdateWindowLayout from "../../layouts/shared/UpdateWindowLayout.astro"
 import TaskLayout from "../../layouts/TaskLayout.astro"
 const endpoint = `${import.meta.env.API_URL}tasks`
 ---
-<div x-data="{isCreateWindowOpen: false, isDeleteWindowOpen: false, isUpdateWindowOpen: false}">
+<div x-data="{isCreateWindowOpen: false, isDeleteWindowOpen: false, isUpdateWindowOpen: false, updateStatusWindowOpen: false}">
     <TaskLayout>
-        <div x-data="{id: '', name: '', description: '', status: ''}">
+        <div x-data=`{id: '', title: '', description: '', completed: false}`>
             <ListTask endpoint={endpoint}/>
             <CreateWindowLayout name="Crear una tarea" endpoint={endpoint}>
                 <CreateTask/>
@@ -21,6 +21,10 @@ const endpoint = `${import.meta.env.API_URL}tasks`
             </UpdateWindowLayout>
 
             <DeleteWindow endpoint={endpoint}/>
+
         </div>
     </TaskLayout>
 </div>
+
+<script>
+</script>

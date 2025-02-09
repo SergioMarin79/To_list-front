@@ -2,12 +2,12 @@
 import { defineConfig } from 'astro/config';
 import icon from "astro-icon";
 
-import alpinejs from '@astrojs/alpinejs';
+import alpine from '@astrojs/alpinejs';
 
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  integrations: [alpinejs(), icon()],
+  integrations: [alpine({entrypoint: '/src/utils/entrypoint' }), icon()],
 
   vite: {
     plugins: [tailwindcss()]

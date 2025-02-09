@@ -1,107 +1,102 @@
 ---
-import { Icon } from "astro-icon/components"
-import { getData } from "../../utils"
+import { Icon } from "astro-icon/components";
+import axios from "axios";
 
-const {endpoint} = Astro.props
-const getAllTasks = await getData(endpoint)
+const { endpoint } = Astro.props;
+const getAllTasks = await axios
+  .get(endpoint)
+  .then((response) => response.data)
+  .catch((error) => console.log(error));
+
+console.log(getAllTasks);
 ---
-{
-  getAllTasks && getAllTasks.length ?
-  (
-  <div class="flex h-screen">
-    <div class="flex-1 p-4">
-      <h2 class="text-xl font-semibold mb-4">Tareas No Completadas</h2>
-      
-      <div class="bg-white p-4 rounded-lg shadow-lg mb-4 relative">
-        <h3 class="text-lg font-bold">Tarea 1</h3>
-        <p class="text-gray-600">Descripción de la tarea 1.</p>
-        <span class="inline-block mt-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">No Completado</span>
-        
-        <button class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none">
-          <i class="fas fa-ellipsis-h"></i>
-        </button>
-        <div class="absolute top-8 right-4 bg-white shadow-md rounded-lg w-40 hidden group-hover:block">
-          <ul class="text-sm">
-            <li><a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-200">Editar</a></li>
-            <li><a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-200">Eliminar</a></li>
-          </ul>
+
+<div
+  x-data=`{tasks: ${JSON.stringify(getAllTasks)} || ''}`
+  class="flex h-screen"
+>
+  <div class="flex-1 p-4">
+    <h2 class="text-xl font-semibold mb-4">Tareas No Completadas</h2>
+    <template x-for="task in tasks.filter(t => t.completed === false)">
+      <div x-sort:item class="bg-white p-4 rounded-lg shadow-lg mb-4 relative">
+        <h3 class="text-lg font-bold" x-text="task.title"></h3>
+        <p class="text-gray-600" x-text="task.description"></p>
+        <span
+          class="inline-block mt-2 text-white text-xs px-2 py-1 rounded-full"
+          x-text="task.completed ? 'Completado' : 'Sin completar'"
+          :class="task.completed ? 'bg-green-500' : 'bg-red-500'"></span>
+        <div x-data="{isListOptionsOpen : false}">
+          <button
+            @click="isListOptionsOpen = !isListOptionsOpen"
+            class="absolute cursor-pointer top-12 right-4 text-gray-600 hover:text-gray-800 focus:outline-none"
+          >
+            <Icon name="shared/options" />
+          </button>
+          <div
+            @click.outside="isListOptionsOpen = false"
+            x-show="isListOptionsOpen"
+            class="absolute top-8 right-4 bg-white shadow-md rounded-lg w-40 group-hover:block"
+          >
+            <ul class="text-sm">
+              <li>
+                <a
+                  @click.prevent="isUpdateWindowOpen = true, id = task.id, title = task.title, description = task.description, completed = task.completed"
+                  class="block px-4 py-2 text-gray-600 hover:bg-gray-200"
+                  >Editar</a>
+              </li>
+              <li>
+                <a
+                  @click.prevent="isDeleteWindowOpen = true, id = task.id"
+                  class="block px-4 py-2 text-gray-600 hover:bg-gray-200"
+                  >Eliminar</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-
-      <div class="bg-white p-4 rounded-lg shadow-lg mb-4 relative">
-        <h3 class="text-lg font-bold">Tarea 2</h3>
-        <p class="text-gray-600">Descripción de la tarea 2.</p>
-        <span class="inline-block mt-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">No Completado</span>
-        
-        <button class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none">
-          <i class="fas fa-ellipsis-h"></i>
-        </button>
-        <div class="absolute top-8 right-4 bg-white shadow-md rounded-lg w-40 hidden group-hover:block">
-          <ul class="text-sm">
-            <li><a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-200">Editar</a></li>
-            <li><a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-200">Eliminar</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Línea divisoria -->
-    <div class="w-px bg-gray-300"></div>
-
-    <!-- Sección de tareas completadas -->
-    <div class="flex-1 p-4">
-      <h2 class="text-xl font-semibold mb-4">Tareas Completadas</h2>
-      
-      <div class="bg-white p-4 rounded-lg shadow-lg mb-4 relative">
-        <h3 class="text-lg font-bold">Tarea 3</h3>
-        <p class="text-gray-600">Descripción de la tarea 3.</p>
-        <span class="inline-block mt-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">Completado</span>
-        <div x-data="{isListOptionsMenu: false}">
-            <button @click="isListOptionsMenu = !isListOptionsMenu" class="absolute top-13 right-4 text-gray-600 hover:text-gray-800 focus:outline-none">
-                <Icon name="shared/options"/>
-            </button>
-              <div x-show="isListOptionsMenu" class="absolute top-10 right-4 bg-white shadow-md rounded-lg w-40 group-hover:block">
-                <ul class="text-sm">
-                  <li><a @click="isUpdateWindowOpen = true, isListOptionsMenu = false" class="block px-4 py-2 cursor-pointer text-gray-600 hover:bg-gray-200">Editar</a></li>
-                  <li><a @click="isDeleteWindowOpen = true, isListOptionsMenu = false" class="block px-4 py-2 cursor-pointer text-gray-600 hover:bg-gray-200">Eliminar</a></li>
-                </ul>
-              </div>
-            </div>
-        </div>
-      <div class="bg-white p-4 rounded-lg shadow-lg mb-4 relative">
-        <h3 class="text-lg font-bold">Tarea 4</h3>
-        <p class="text-gray-600">Descripción de la tarea 4.</p>
-        <span class="inline-block mt-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">Completado</span>
-        
-        <!-- Menú desplegable -->
-        <button class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none">
-          <i class="fas fa-ellipsis-h"></i>
-        </button>
-        <div class="absolute top-8 right-4 bg-white shadow-md rounded-lg w-40 hidden group-hover:block">
-          <ul class="text-sm">
-            <li><a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-200">Editar</a></li>
-            <li><a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-200">Eliminar</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    </template>
   </div>
-  )
-  : (
-  <div class="flex flex-col justify-center items-center text-center w-full h-full">
-  <svg class="mx-auto size-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-    <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-  </svg>
-  <h3 class="mt-2 text-sm font-semibold text-gray-900">Sin tareas</h3>
-  <p class="mt-1 text-sm text-gray-500">Da click para crear una nueva tarea.</p>
-  <div class="mt-6">
-    <button type="button" @click="isCreateWindowOpen = true" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-      <svg class="-ml-0.5 mr-1.5 size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-        <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-      </svg>
-      Nueva tarea
-    </button>
+  <div class="w-px bg-gray-300"></div>
+
+  <div class="flex-1 p-4">
+    <h2 class="text-xl font-semibold mb-4">Tareas Completadas</h2>
+    <template x-for="task in tasks.filter(t => t.completed === true)">
+      <div class="bg-white p-4 rounded-lg shadow-lg mb-4 relative">
+        <h3 class="text-lg font-bold" x-text="task.title"></h3>
+        <p class="text-gray-600" x-text="task.description"></p>
+        <span
+          class="inline-block mt-2 text-white text-xs px-2 py-1 rounded-full"
+          x-text="task.completed ? 'Completado' : 'Sin completar'"
+          :class="task.completed ? 'bg-green-500' : 'bg-red-500'"></span>
+        <div x-data="{isListOptionsOpen : false}">
+          <button
+            @click="isListOptionsOpen = !isListOptionsOpen"
+            class="absolute cursor-pointer top-12 right-4 text-gray-600 hover:text-gray-800 focus:outline-none"
+          >
+            <Icon name="shared/options" />
+          </button>
+          <div
+            @click.outside="isListOptionsOpen = false"
+            x-show="isListOptionsOpen"
+            class="absolute top-8 right-4 bg-white shadow-md rounded-lg w-40 group-hover:block"
+          >
+            <ul class="text-sm">
+              <li>
+                <a
+                  @click.prevent="isUpdateWindowOpen = true, id = task.id, title = task.title, description = task.description, completed = task.completed"
+                  class="block px-4 py-2 text-gray-600 hover:bg-gray-200"
+                  >Editar</a>
+              </li>
+              <li>
+                <a
+                  @click.prevent="isDeleteWindowOpen = true, id = task.id"
+                  class="block px-4 py-2 text-gray-600 hover:bg-gray-200"
+                  >Eliminar</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </div>
-  )
-}

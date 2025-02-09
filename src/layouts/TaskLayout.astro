@@ -2,8 +2,8 @@
 import { Icon } from "astro-icon/components";
 import "../styles/global.css";
 import BreadCrumb from "../components/shared/BreadCrumb.astro";
+import Alert from "../components/shared/Alert.astro";
 ---
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -33,13 +33,11 @@ import BreadCrumb from "../components/shared/BreadCrumb.astro";
     </div>
   </body>
   <script>
-import { responseHandle } from "../utils"
+    import { responseHandle } from "../utils/app"
 
-    document.addEventListener('astro:page-load', () => {
-      const form = document.querySelectorAll('form[method]')
+     const form = document.querySelectorAll("form[data-method]")
         form.forEach((f) => {
           f.addEventListener('submit', responseHandle)
         })
-    })
   </script>
 </html>

@@ -11,8 +11,9 @@ const { endpoint, name } = Astro.props;
         >
             <form
                 action={endpoint}
+                id="form"
                 class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-5xl"
-                method="PATCH"
+                data-method="PATCH"
             >
                 <div>
                     <h2

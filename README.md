@@ -1,48 +1,43 @@
-# Astro Starter Kit: Basics
+# Proyecto construido con Astro
 
-```sh
-npm create astro@latest -- --template basics
-```
+Este proyecto ha sido desarrollado utilizando la tecnología de **Astro**. A continuación, se detallan los pasos y requisitos necesarios para ejecutar y desplegar el proyecto correctamente.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## Requisitos principales
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- **Node.js**  
+- **NPM**
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+## Pasos para ejecutar el proyecto
 
-## 🚀 Project Structure
+1. **Iniciar el proyecto en desarrollo**  
+   Para ejecutar el proyecto en modo desarrollo, utiliza el siguiente comando:
+   ```bash
+   npm run dev
+   ```
 
-Inside of your Astro project, you'll see the following folders and files:
+2. **Construir el proyecto para producción**  
+   Para construir el proyecto y desplegarlo en un ambiente de producción local, utiliza:
+   ```bash
+   npx astro build
+   ```
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+3. **Desplegar en un servidor**  
+   Para desplegar el proyecto en un servidor, sigue estos pasos:
+   - Primero, ejecuta el comando de construcción:
+     ```bash
+     npx astro build
+     ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+   - Después, comprime la carpeta `dist` generada.
+   
+   - Sube la carpeta comprimida a la máquina en el servidor.
+   
+   - Es importante copiar el archivo `package.json` dentro de la carpeta `dist/server`, ya que dentro del servidor necesitaremos ejecutar un `npm i` para instalar las dependencias.
+   
+4. **Construir y ejecutar el proyecto en el servidor**  
+   Una vez que las dependencias se han instalado, ejecuta el siguiente comando para iniciar el servidor:
+   ```bash
+   node entry.mjs --host=<IP_del_servidor> --port=<puerto>
+   ```
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+¡Y eso es todo! Con estos pasos deberías poder ejecutar y desplegar el proyecto sin inconvenientes.

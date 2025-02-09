@@ -1,13 +1,16 @@
 ---
+import Alert from "./Alert.astro";
+
 const { endpoint } = Astro.props;
 ---
+
 <div
     x-show="isDeleteWindowOpen"
-    id="popup-modal"
     tabindex="-1"
     class="overflow-y-auto overflow-x-hidden fixed top-0 left-0 right-0 bottom-0 z-50 flex justify-center items-center w-full h-full"
 >
     <div class="relative p-4 w-full max-w-md max-h-full">
+        <Alert />
         <div class="relative bg-white rounded-lg shadow-sm">
             <button
                 type="button"
@@ -49,25 +52,23 @@ const { endpoint } = Astro.props;
                 </svg>
                 <h3 class="mb-5 text-lg font-normal text-gray-500">
                     ¿Estás seguro de eliminar esta tarea?
-                </h3>
-                <form method="POST" action={endpoint}>
-                    <input type="text" name="id" :value="id" id="id">
+                </h3>x
+                <form data-method="delete" id="form" action={endpoint}>
+                    <input type="text" hidden name="id" :value="id" id="id" />
+                    <button
+                        @click="isDeleteWindowOpen = false"
+                        type="button"
+                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        type="submit"
+                        class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                    >
+                        Aceptar
+                    </button>
                 </form>
-                <button
-                    data-modal-hide="popup-modal"
-                    @click="isDeleteWindowOpen = false"
-                    type="button"
-                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
-                >
-                    Cancelar
-                </button>
-                <button
-                    data-modal-hide="popup-modal"
-                    type="button"
-                    class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-                >
-                    Aceptar
-                </button>
             </div>
         </div>
     </div>
